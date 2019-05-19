@@ -1,34 +1,34 @@
 ﻿using NUnit.Framework;
-using System;
 using productapi.Models;
-using productapi.Services;
 using System.Collections.Generic;
 using productapi.Controllers;
+using Newtonsoft.Json.Linq;
+using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace productapi.Tests
 {
     [TestFixture]
     public class APITests
     {
-
         [Test]
-        public void GetAllProducts()
+        public void AddProductsAddsAProductFromJSONAndReturnsTheSameValidProduct()
         {
-            IList<Product> templateProducts = CreateProducts();
-            ProductsController controller = new ProductsController(templateProducts);
+            Product templateProduct = TemplateProducts.Products["DYNS1"];
 
-            IList<Product> products = controller.GetProducts();
-            Assert.AreEqual(products.Count, 2);
-            Assert.Contains(templateProducts[0], products as List<Product>);
-            Assert.Contains(templateProducts[1], products as List<Product>);
+            ProductsController controller = new ProductsController(new Dictionary<string, Product>());
+            IHttpActionResult setProductResult = controller.SetProducts(JObject.FromObject(templateProduct));
+            OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
+
+            Assert.AreEqual(Newtonsoft.Json.JsonConvert.SerializeObject(productResult.Content), Newtonsoft.Json.JsonConvert.SerializeObject(templateProduct));
         }
 
-        private IList<Product> CreateProducts()
+        [Test]
+        public void GetAllProductsReturnsExpectedProducts()
         {
-            return new List<Product> {
-                new Product("1", "Dyson Cyclone V10 Animal", "Dyson", "226419-01"),
-                new Product("2", "Samsung Galaxy S9+ 64GB (Midnight Black)", "Samsung", "1091005388")
-            };
+            ProductsController controller = new ProductsController(TemplateProducts.Products);
+            Assert.AreEqual(new List<Product>(TemplateProducts.Products.Values), new List<Product>(controller.GetProducts()));
+           
         }
     }
 }

@@ -6,9 +6,9 @@ namespace productapi.Data
 {
     public static class ProductData
     {
-        private static List<Product> Cache;
+        private static Dictionary<string, Product> Cache;
         private static object CacheLock = new object();
-        public static List<Product> Products
+        public static Dictionary<string, Product> Products
         {
             get
             {
@@ -16,7 +16,7 @@ namespace productapi.Data
                 {
                     if (Cache == null)
                     {
-                        Cache = new List<Product>();
+                        Cache = new Dictionary<string, Product>();
                     }
                     return Cache;
                 }

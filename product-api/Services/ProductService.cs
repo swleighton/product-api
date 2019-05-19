@@ -1,27 +1,32 @@
 ﻿using productapi.Models;
+using System;
 using System.Collections.Generic;
 
 namespace productapi.Services
 {
     public class ProductService
     {
-        private IList<Product> Products;
+        private IDictionary<string, Product> Products;
 
-        public ProductService(IList<Product> products)
+        public ProductService(IDictionary<string, Product> products) 
         {
             Products = products;
         }
 
-        public Product Add(string description, string brand, string model)
+        public Product Add(string id, string description, string brand, string model)
         {
-            Product product = new Product("1", description, brand, model);
-            Products.Add(product);
+            if (Products.ContainsKey(id))
+                throw new ProductExistsException("A product already exists with the Id:" + id);
+            
+            Product product = new Product(id, description, brand, model);
+            Products.Add(product.Id, product);
             return product;
+
         }
 
-        public IList<Product> GetAll()
+        public ICollection<Product> GetAll()
         {
-            return Products;
+            return Products.Values;
         }
     }
 }

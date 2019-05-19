@@ -25,16 +25,19 @@ namespace productapi.Controllers
             ProductService = new ProductService((ProductData.Products));
         }
 
-        public ProductsController(IList<Product> products)
+        //Provide a custom Dictionary for product storage
+        public ProductsController(IDictionary<string, Product> products)
         {
             ProductService = new ProductService(products);
         }
 
 
         [HttpGet]
-        public IList<Product> GetProducts()
+        public ICollection<Product> GetProducts()
         {
-            return ProductService.GetAll();
+            ICollection<Product>  product = ProductService.GetAll();
+            int test = product.Count;
+            return product;
         }
 
         [HttpPost]
@@ -42,14 +45,17 @@ namespace productapi.Controllers
         {
             try
             {
-                Product product = ProductService.Add(data.GetValue("description").ToString(), data.GetValue("brand").ToString(), data.GetValue("model").ToString());
+                Product product = ProductService.Add(data.GetValue("Id").ToString(), data.GetValue("Description").ToString(), data.GetValue("Brand").ToString(), data.GetValue("Model").ToString());
                 return Ok(product);
             }
             catch (NullReferenceException)
             {
-                return BadRequest("Post data was not formatted correctly. Please supply a JSON object the key/value pairs of description:value, brand:string and model:string");
+                return BadRequest("Posting product failed - Post data was not formatted correctly. Please supply a JSON object the key/value pairs of description:value, brand:string and model:string");
             }
-
+            catch (ProductExistsException)
+            {
+                return BadRequest("Posting product failed - A product with that Id already exists.");
+            }
         }
     }
 }
