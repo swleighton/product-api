@@ -88,5 +88,22 @@ namespace productapi.Controllers
                 return BadRequest("Posting product failed - A product with that Id already exists.");
             }
         }
+
+        /// <summary>
+        /// Remomes the product with the Id Passed
+        /// </summary>
+        /// <param name="id">ID of the product to remove</param>
+        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        [HttpDelete]
+        public IHttpActionResult DeleteProduct(string id)
+        {
+            if (ProductService.Delete(id))
+            {
+                return Ok();
+            } else
+            {
+                return BadRequest("Deleting product failed - Unable to find product by Id");
+            }
+        }
     }
 }

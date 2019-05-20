@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using productapi.Models;
 using productapi.Services;
+using System;
 using System.Collections.Generic;
 
 namespace productapi.Tests
@@ -41,7 +42,7 @@ namespace productapi.Tests
         }
 
         [Test]
-        public void GetProductReturnsTheCorrecProducts()
+        public void GetProductReturnsTheCorrectProducts()
         {
             ProductService productService = new ProductService((TemplateProducts.Products));
 
@@ -56,6 +57,32 @@ namespace productapi.Tests
             ProductService productService = new ProductService((TemplateProducts.Products));
 
             Assert.Throws<KeyNotFoundException>(() => productService.Get("NO PRODUCT"));
+        }
+
+        [Test]
+        public void DeleteProductReturnsTrueAndRemovesTheCorrectProduct()
+        {
+            Dictionary<string, Product> products = new Dictionary<string, Product>{
+               { "SMSNG1", TemplateProducts.Products["SMSNG1"] },
+               { "DYNS1", TemplateProducts.Products["DYNS1"] }
+            };
+
+            ProductService productService = new ProductService(products);
+
+            Assert.IsTrue(productService.Delete("DYNS1"));
+
+            Assert.AreEqual(products, new Dictionary<string, Product>
+            {
+                { "SMSNG1", TemplateProducts.Products["SMSNG1"] }
+            });
+        }
+
+        [Test]
+        public void DeleteProductReturnsFalseIfProductNotFound()
+        {
+            ProductService productService = new ProductService((TemplateProducts.Products));
+            Assert.IsFalse(productService.Delete("NO PRODUCT"));
+
         }
     }
 }

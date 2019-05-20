@@ -45,7 +45,55 @@ namespace productapi.Tests
 
             BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
             Assert.AreEqual("Retriving product failed - No product found with the Id:NOT A PRODUCT", productResult.Message);
-           
+        }
+
+        [Test]
+        public void DeleteValidProductReturnsSucess()
+        {
+            Dictionary<string, Product> products = new Dictionary<string, Product>{
+               { "SMSNG1", TemplateProducts.Products["SMSNG1"] },
+               { "DYNS1", TemplateProducts.Products["DYNS1"] }
+            };
+
+            ProductsController controller = new ProductsController(products);
+
+            IHttpActionResult setProductResult = controller.DeleteProduct("DYNS1");
+            OkResult productResult = setProductResult as OkResult;
+
+            Assert.IsNotNull(productResult);
+
+            Assert.AreEqual(new Dictionary<string, Product>{
+               { "SMSNG1", TemplateProducts.Products["SMSNG1"] }
+            }, products);
+        }
+
+        [Test]
+        public void DeleteProductRemovesProductCorrectly()
+        {
+            Dictionary<string, Product> products = new Dictionary<string, Product>{
+               { "SMSNG1", TemplateProducts.Products["SMSNG1"] },
+               { "DYNS1", TemplateProducts.Products["DYNS1"] }
+            };
+
+            ProductsController controller = new ProductsController(products);
+
+            controller.DeleteProduct("DYNS1");
+
+            Assert.AreEqual(new Dictionary<string, Product>{
+               { "SMSNG1", TemplateProducts.Products["SMSNG1"] }
+            }, products);
+        }
+
+        [Test]
+        public void DeleteProductReturnsErrorIfProductNotFound()
+        {
+            ProductsController controller = new ProductsController(TemplateProducts.Products);
+
+            IHttpActionResult setProductResult = controller.DeleteProduct("NOT A PRODUCT");
+
+            BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
+            Assert.AreEqual("Deleting product failed - Unable to find product by Id", productResult.Message);
+
         }
 
         [Test]

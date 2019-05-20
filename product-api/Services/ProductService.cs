@@ -34,5 +34,10 @@ namespace productapi.Services
         {
             return Products[id];
         }
+
+        public bool Delete(string id)
+        {
+            return Products.Remove(id);
+        }
     }
 }
