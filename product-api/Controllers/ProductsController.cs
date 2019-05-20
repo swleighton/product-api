@@ -15,23 +15,36 @@ using System.Web;
 
 namespace productapi.Controllers
 {
+    /// <summary>
+    /// HttpRequest handlers for product API
+    /// </summary>
     public class ProductsController : ApiController
     {
 
         ProductService ProductService;
 
+        /// <summary>
+        /// Creates a Product Controller instance with the default global singleton Dictionary for product storage
+        /// </summary>
         public ProductsController()
         {
             ProductService = new ProductService((ProductData.Products));
         }
 
-        //Provide a custom Dictionary for product storage
+        /// <summary>
+        /// Creates a Product Controller instance with a custom Dictionary for product storage
+        /// </summary>
+        /// <param name="products">The IDictionary of products</param>
         public ProductsController(IDictionary<string, Product> products)
         {
             ProductService = new ProductService(products);
         }
 
 
+
+        /// <summary>
+        /// Gets an ICollection of all current products
+        /// </summary>
         [HttpGet]
         public ICollection<Product> GetProducts()
         {
@@ -40,8 +53,14 @@ namespace productapi.Controllers
             return product;
         }
 
+
+        /// <summary>
+        /// Creates a new product entry
+        /// </summary>
+        /// <param name="data">The JSON Object of a product</param>
+        /// <returns>Http 200 Ok and a copy of the product sucessfully, a http 400 Bad Request and error message if unsucessful</returns>  
         [HttpPost]
-        public IHttpActionResult SetProducts([FromBody]JObject data)
+        public IHttpActionResult SetProduct([FromBody]JObject data)
         {
             try
             {
