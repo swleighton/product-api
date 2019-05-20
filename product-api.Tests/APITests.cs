@@ -17,10 +17,35 @@ namespace productapi.Tests
             Product templateProduct = TemplateProducts.Products["DYNS1"];
 
             ProductsController controller = new ProductsController(new Dictionary<string, Product>());
-            IHttpActionResult setProductResult = controller.SetProducts(JObject.FromObject(templateProduct));
+            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
             Assert.AreEqual(Newtonsoft.Json.JsonConvert.SerializeObject(productResult.Content), Newtonsoft.Json.JsonConvert.SerializeObject(templateProduct));
+        }
+
+        [Test]
+        public void GetProductReturnsTheCorrectProduct()
+        {
+            Product templateProduct = TemplateProducts.Products["DYNS1"];
+
+            ProductsController controller = new ProductsController(TemplateProducts.Products);
+
+            IHttpActionResult setProductResult = controller.GetProduct(templateProduct.Id);
+            OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
+
+            Assert.AreEqual(productResult.Content, templateProduct);
+        }
+
+        [Test]
+        public void GetProductReturnsErrorIfProductNotFound()
+        {
+            ProductsController controller = new ProductsController(TemplateProducts.Products);
+
+            IHttpActionResult setProductResult = controller.GetProduct("NOT A PRODUCT");
+
+            BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
+            Assert.AreEqual("Retriving product failed - No product found with the Id:NOT A PRODUCT", productResult.Message);
+           
         }
 
         [Test]
@@ -28,7 +53,7 @@ namespace productapi.Tests
         {
             ProductsController controller = new ProductsController(TemplateProducts.Products);
             Assert.AreEqual(new List<Product>(TemplateProducts.Products.Values), new List<Product>(controller.GetProducts()));
-           
         }
+
     }
 }

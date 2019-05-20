@@ -38,6 +38,24 @@ namespace productapi.Tests
             ICollection<Product> products = productService.GetAll();
 
             Assert.AreEqual(TemplateProducts.ComparisonProducts.Values , products);
-        } 
+        }
+
+        [Test]
+        public void GetProductReturnsTheCorrecProducts()
+        {
+            ProductService productService = new ProductService((TemplateProducts.Products));
+
+            Product product = productService.Get("DYNS1");
+
+            Assert.AreEqual(TemplateProducts.ComparisonProducts["DYNS1"], product);
+        }
+
+        [Test]
+        public void GetProductKeyNotFoundExceptionIfProductNotFound()
+        {
+            ProductService productService = new ProductService((TemplateProducts.Products));
+
+            Assert.Throws<KeyNotFoundException>(() => productService.Get("NO PRODUCT"));
+        }
     }
 }

@@ -53,6 +53,18 @@ namespace productapi.Controllers
             return product;
         }
 
+        [HttpGet]
+        public IHttpActionResult GetProduct(string id)
+        {
+            try
+            {
+                return Ok(ProductService.Get(id));
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest("Retriving product failed - No product found with the Id:" + id);
+            }
+        }
 
         /// <summary>
         /// Creates a new product entry

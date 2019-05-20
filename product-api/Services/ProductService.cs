@@ -8,6 +8,7 @@ namespace productapi.Services
     {
         private IDictionary<string, Product> Products;
 
+
         public ProductService(IDictionary<string, Product> products) 
         {
             Products = products;
@@ -27,6 +28,11 @@ namespace productapi.Services
         public ICollection<Product> GetAll()
         {
             return Products.Values;
+        }
+
+        public Product Get(string id)
+        {
+            return Products[id];
         }
     }
 }
