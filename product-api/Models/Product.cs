@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace productapi.Models
@@ -23,6 +24,21 @@ namespace productapi.Models
             Description = description;
             Brand = brand;
             Model = model;
+        }
+
+        public bool IsComplete()
+        {
+            foreach (PropertyInfo FI in this.GetType().GetProperties())
+            {
+                object fieldValue = FI.GetValue(this);
+
+                if (fieldValue == null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)

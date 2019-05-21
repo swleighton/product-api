@@ -15,7 +15,7 @@ namespace productapi.Tests
             Product templateProduct = TemplateProducts.Products["DYNS1"];
             ProductService productService = new ProductService(new Dictionary<string, Product>());
 
-            Product product = productService.Add(templateProduct.Id, templateProduct.Description, templateProduct.Brand, templateProduct.Model);
+            Product product = productService.Add(templateProduct);
 
             Assert.AreEqual(templateProduct, product);
         }
@@ -28,7 +28,15 @@ namespace productapi.Tests
                 { "DYNS1",  TemplateProducts.Products["DYNS1"] }
             });
 
-            Assert.Throws<ProductExistsException>(() => productService.Add(templateProduct.Id, templateProduct.Description, templateProduct.Brand, templateProduct.Model));
+            Assert.Throws<ProductExistsException>(() => productService.Add(templateProduct));
+        }
+
+        [Test]
+        public void AddProductThrowsAnInvalidProductExceptionIfAllProductPropsAreNotPassed()
+        {
+            ProductService productService = new ProductService(TemplateProducts.Products);
+
+            Assert.Throws<InvalidProductException>(() => productService.Add(new Product()));
         }
 
         [Test]

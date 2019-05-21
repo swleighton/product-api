@@ -179,6 +179,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Provider\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Helpers\DictionaryToObject.cs" />
+    <Compile Include="Exceptions\InvalidProductException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />

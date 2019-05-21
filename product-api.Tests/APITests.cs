@@ -21,7 +21,33 @@ namespace productapi.Tests
             IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
-            Assert.AreEqual(Newtonsoft.Json.JsonConvert.SerializeObject(productResult.Content), Newtonsoft.Json.JsonConvert.SerializeObject(templateProduct));
+            Assert.AreEqual(productResult.Content, templateProduct);
+        }
+
+        [Test]
+        public void AddProductseReturnsAnErrorIfAllPropsAreNotPassed()
+        {
+            Product templateProduct = new Product(null, null, null, null);
+
+            ProductsController controller = new ProductsController(new Dictionary<string, Product>());
+            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
+            BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
+
+            Assert.IsNotNull(productResult); 
+            Assert.AreEqual("Posting product failed - Post data was not formatted correctly. Please supply a JSON object the key/value pairs of description:value, brand:string and model:string", productResult.Message);
+        }
+
+        [Test]
+        public void AddProductseReturnsAnErrorIfIDAlreadyExists()
+        {
+            Product templateProduct = TemplateProducts.Products["DYNS1"];
+
+            ProductsController controller = new ProductsController(TemplateProducts.Products);
+            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
+            BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
+
+            Assert.IsNotNull(productResult);
+            Assert.AreEqual("A product already exists with the Id:DYNS1", productResult.Message);
         }
 
         [Test]

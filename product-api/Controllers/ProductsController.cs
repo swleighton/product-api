@@ -82,16 +82,15 @@ namespace productapi.Controllers
         {
             try
             {
-                Product product = ProductService.Add(data.GetValue("Id").ToString(), data.GetValue("Description").ToString(), data.GetValue("Brand").ToString(), data.GetValue("Model").ToString());
-                return Ok(product);
+                return Ok(ProductService.Add(data.ToObject<Product>()));
             }
-            catch (NullReferenceException)
+            catch (ProductExistsException e)
             {
-                return BadRequest("Posting product failed - Post data was not formatted correctly. Please supply a JSON object the key/value pairs of description:value, brand:string and model:string");
+                return BadRequest(e.Message);
             }
-            catch (ProductExistsException)
+            catch (InvalidProductException e)
             {
-                return BadRequest("Posting product failed - A product with that Id already exists.");
+                return BadRequest(e.Message);
             }
         }
 

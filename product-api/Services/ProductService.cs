@@ -17,12 +17,13 @@ namespace productapi.Services
             Products = products;
         }
 
-        public Product Add(string id, string description, string brand, string model)
+        public Product Add(Product product)
         {
-            if (Products.ContainsKey(id))
-                throw new ProductExistsException("A product already exists with the Id:" + id);
+            if(!product.IsComplete())
+                throw new InvalidProductException("Posting product failed - Post data was not formatted correctly. Please supply a JSON object the key/value pairs of description:value, brand:string and model:string");
+            else if (Products.ContainsKey(product.Id))
+                throw new ProductExistsException("A product already exists with the Id:" + product.Id);
             
-            Product product = new Product(id, description, brand, model);
             Products.Add(product.Id, product);
             return product;
 
