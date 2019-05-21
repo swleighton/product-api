@@ -5,6 +5,7 @@ using productapi.Controllers;
 using Newtonsoft.Json.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using System.Net.Http;
 
 namespace productapi.Tests
 {
@@ -203,9 +204,25 @@ namespace productapi.Tests
         [Test]
         public void GetAllProductsReturnsExpectedProducts()
         {
-            ProductsController controller = new ProductsController(TemplateProducts.Products);
+            ProductsController controller = new ProductsController(TemplateProducts.Products)
+            {
+                Request = new System.Net.Http.HttpRequestMessage(),
+                Configuration = new HttpConfiguration()
+            };
             Assert.AreEqual(new List<Product>(TemplateProducts.Products.Values), new List<Product>(controller.GetProducts()));
         }
+
+        [Test]
+        public void GetAllProductsWithFilterReturnsExpectedProducts()
+        {
+            ProductsController controller = new ProductsController(TemplateProducts.Products)
+            {
+                Request = new System.Net.Http.HttpRequestMessage(HttpMethod.Get, "http://localhost:8080/?Brand=Dyson"),
+                Configuration = new HttpConfiguration()
+            };
+            Assert.AreEqual(new List<Product> { TemplateProducts.Products["DYNS1"] }, new List<Product>(controller.GetProducts()));
+        }
+
 
     }
 }

@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections;
 using productapi.Data;
 using System.Web;
+using productapi.Helpers;
 
 namespace productapi.Controllers
 {
@@ -40,17 +41,21 @@ namespace productapi.Controllers
             ProductService = new ProductService(products);
         }
 
-
-
         /// <summary>
-        /// Gets an ICollection of all current products
+        /// Gets an ICollection of all current products filtered by query params of product props if specified
         /// </summary>
         [HttpGet]
         public ICollection<Product> GetProducts()
         {
-            ICollection<Product>  product = ProductService.GetAll();
-            int test = product.Count;
-            return product;
+            Product product = new Product();
+            Dictionary<string, string> filterParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
+
+            if (filterParams.Count > 0)
+            {   
+                product = DictionaryToProduct.Convert(filterParams);
+            } 
+
+            return ProductService.GetAll(product);
         }
 
         [HttpGet]

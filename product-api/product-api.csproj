@@ -178,6 +178,7 @@
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Provider\SimpleAuthorizationServerProvider.cs" />
+    <Compile Include="Helpers\DictionaryToObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -186,6 +187,7 @@
     <Folder Include="Data\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Provider\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
