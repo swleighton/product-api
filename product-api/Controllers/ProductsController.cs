@@ -72,6 +72,7 @@ namespace productapi.Controllers
         /// <param name="data">The JSON Object of a product</param>
         /// <returns>Http 200 Ok and a copy of the product sucessfully, a http 400 Bad Request and error message if unsucessful</returns>  
         [HttpPost]
+        [Authorize]
         public IHttpActionResult SetProduct([FromBody]JObject data)
         {
             try
@@ -95,6 +96,7 @@ namespace productapi.Controllers
         /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
         /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
         [HttpPut]
+        [Authorize]
         public IHttpActionResult UpdateProduct([FromBody]JObject data)
         {
             try
@@ -116,6 +118,7 @@ namespace productapi.Controllers
         /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
         /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
         [HttpPut]
+        [Authorize]
         public IHttpActionResult UpdateProduct(string id, [FromBody]JObject data)
         {
             data["Id"] = id;
@@ -128,6 +131,7 @@ namespace productapi.Controllers
         /// <param name="id">ID of the product to remove</param>
         /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
         [HttpDelete]
+        [Authorize]
         public IHttpActionResult DeleteProduct(string id)
         {
             if (ProductService.Delete(id))

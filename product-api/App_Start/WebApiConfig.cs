@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using System.Web.Mvc;
 
 namespace productapi
 {
@@ -8,7 +7,7 @@ namespace productapi
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            AreaRegistration.RegisterAllAreas();
+
 
             // Web API routes
             config.MapHttpAttributeRoutes();
