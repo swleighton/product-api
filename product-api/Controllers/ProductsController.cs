@@ -90,6 +90,39 @@ namespace productapi.Controllers
         }
 
         /// <summary>
+        /// Updates the product with the matching ID's fields with those passed in the request body         
+        /// </summary>
+        /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
+        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        [HttpPut]
+        public IHttpActionResult UpdateProduct([FromBody]JObject data)
+        {
+            try
+            {
+                Product product = data.ToObject<Product>();
+                return Ok(ProductService.Update(product));
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest("Updating the product failed - No product found with the Id:" + data["id"]);
+            }
+
+        }
+
+        /// <summary>
+        /// Updates the product with the Id Passed in the url with the fields passed in the request body (excluding the Id)
+        /// </summary>
+        /// <param name="id">ID of the product to remove</param>
+        /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
+        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        [HttpPut]
+        public IHttpActionResult UpdateProduct(string id, [FromBody]JObject data)
+        {
+            data["Id"] = id;
+            return UpdateProduct(data);
+        }
+
+        /// <summary>
         /// Remomes the product with the Id Passed
         /// </summary>
         /// <param name="id">ID of the product to remove</param>

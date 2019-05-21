@@ -19,6 +19,7 @@ namespace productapi.Tests
             {"DYNS1", new Product("DYNS1", "Dyson Cyclone V10 Animal", "Dyson", "226419-01") },
             {"SMSNG1", new Product("SMSNG1", "Samsung Galaxy S9+ 64GB (Midnight Black)", "Samsung", "1091005388")},
         };
-    }
 
+        public static Product FakeProduct = new Product("I Don't Exist", "", "", "");
+    };
 }

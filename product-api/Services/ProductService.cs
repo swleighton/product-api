@@ -1,6 +1,7 @@
 ﻿using productapi.Models;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace productapi.Services
 {
@@ -33,6 +34,25 @@ namespace productapi.Services
         public Product Get(string id)
         {
             return Products[id];
+        }
+
+        public Product Update(Product product)
+        {
+            foreach (PropertyInfo FI in product.GetType().GetProperties())
+            {
+                //Don't need to update the Id as we use this to reference the current object in storage
+                if (FI.Name != "Id")
+                {
+                    object fieldValue = FI.GetValue(product);
+
+                    if (fieldValue != null)
+                    {
+                        FI.SetValue(Products[product.Id], fieldValue.ToString());
+                    }
+                }
+            }
+
+            return Products[product.Id];
         }
 
         public bool Delete(string id)

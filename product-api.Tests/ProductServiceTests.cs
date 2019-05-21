@@ -60,6 +60,27 @@ namespace productapi.Tests
         }
 
         [Test]
+        public void UpdateProductReturnsTheCorrectProduct()
+        {
+            Dictionary<string, Product> products = new Dictionary<string, Product>{
+               { "MCAIR", new Product("MCAIR", "N/A", "N/A", "N/A") }
+            };
+
+            Product updatedProduct = new Product("MCAIR", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A");
+
+            Product productService = new ProductService(products).Update(updatedProduct);
+
+            Assert.AreEqual(updatedProduct, products["MCAIR"]);
+        }
+
+        [Test]
+        public void UpdateProductThrowKeyNotFoundExceptionIfProductNotFound()
+        {
+            ProductService productService = new ProductService((TemplateProducts.Products));
+            Assert.Throws<KeyNotFoundException>(() => productService.Update(TemplateProducts.FakeProduct));
+        }
+
+        [Test]
         public void DeleteProductReturnsTrueAndRemovesTheCorrectProduct()
         {
             Dictionary<string, Product> products = new Dictionary<string, Product>{
@@ -82,7 +103,6 @@ namespace productapi.Tests
         {
             ProductService productService = new ProductService((TemplateProducts.Products));
             Assert.IsFalse(productService.Delete("NO PRODUCT"));
-
         }
     }
 }
