@@ -8,7 +8,12 @@ namespace productapi.Helpers
 {
     public static class DictionaryToProduct
     {
-        public static Product Convert(IDictionary<string, string> dict) 
+        /// <summary>
+        /// Maps the specified Dictionary fields to a product.
+        /// </summary>
+        /// <returns>The product created from the fields</returns>
+        /// <param name="dict">The dictionary to map</param>
+        public static Product Convert(IDictionary<string, string> dict)
         {
             Product product = new Product();
             foreach (PropertyInfo FI in product.GetType().GetProperties())

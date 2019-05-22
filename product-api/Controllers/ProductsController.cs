@@ -51,12 +51,18 @@ namespace productapi.Controllers
             Dictionary<string, string> filterParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
 
             if (filterParams.Count > 0)
-            {   
+            {
                 product = DictionaryToProduct.Convert(filterParams);
-            } 
+            }
 
             return ProductService.GetAll(product);
         }
+
+        /// <summary>
+        /// Retrives the product with the given ID
+        /// </summary>
+        /// <param name="id">Id of the product to retrive</param>
+        /// <returns>Http 200 Ok and a copy of the product if successful, a http 400 Bad Request and error message if unsuccessful</returns>  
 
         [HttpGet]
         public IHttpActionResult GetProduct(string id)
@@ -75,7 +81,7 @@ namespace productapi.Controllers
         /// Creates a new product entry
         /// </summary>
         /// <param name="data">The JSON Object of a product</param>
-        /// <returns>Http 200 Ok and a copy of the product sucessfully, a http 400 Bad Request and error message if unsucessful</returns>  
+        /// <returns>Http 200 Ok and a copy of the product if successfully created, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPost]
         [Authorize]
         public IHttpActionResult SetProduct([FromBody]JObject data)
@@ -98,7 +104,7 @@ namespace productapi.Controllers
         /// Updates the product with the matching ID's fields with those passed in the request body         
         /// </summary>
         /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
-        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        /// <returns>Http 200 Ok if updated successfully, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPut]
         [Authorize]
         public IHttpActionResult UpdateProduct([FromBody]JObject data)
@@ -120,7 +126,7 @@ namespace productapi.Controllers
         /// </summary>
         /// <param name="id">ID of the product to remove</param>
         /// <param name="data">JSON structure of the key/value pairs of the product to update</param>
-        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        /// <returns>Http 200 Ok if updated successfully, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPut]
         [Authorize]
         public IHttpActionResult UpdateProduct(string id, [FromBody]JObject data)
@@ -130,10 +136,10 @@ namespace productapi.Controllers
         }
 
         /// <summary>
-        /// Remomes the product with the Id Passed
+        /// Removes the product with the Id Passed
         /// </summary>
         /// <param name="id">ID of the product to remove</param>
-        /// <returns>Http 200 Ok if sucessful sucessful, a http 400 Bad Request and error message if unsucessful</returns>  
+        /// <returns>Http 200 Ok if deleted successfully, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpDelete]
         [Authorize]
         public IHttpActionResult DeleteProduct(string id)
@@ -141,7 +147,8 @@ namespace productapi.Controllers
             if (ProductService.Delete(id))
             {
                 return Ok();
-            } else
+            }
+            else
             {
                 return BadRequest("Deleting product failed - Unable to find product by Id");
             }
