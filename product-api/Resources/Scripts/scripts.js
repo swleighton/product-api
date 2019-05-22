@@ -23,7 +23,9 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
     case "post":
       addHeaders(request);
       generateBodyObject(request, queryFields, false);
-      console.log(request);
+    case "put":
+      addHeaders(request);
+      generateBodyObject(request, queryFields, false);
     default:
       x = 2;
   }
