@@ -1,5 +1,45 @@
 ﻿queryFields = document.getElementById("req-form").getElementsByTagName("input");
-console.log(queryFields);
+storedUser = getCurrentUser();
+
+if (storedUser) {
+  login(storedUser.username, storedUser.token);
+}
+
+document.getElementById("token-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  var username = document.getElementById("username").value;
+
+  fetch("/token", {
+    method: "post",
+    body: `grant_type=password&username=${username}&password=${
+      document.getElementById("password").value
+    }`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(function(response) {
+    if (response.ok) {
+      response
+        .json()
+        .then(function(data) {
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ username: username, token: data.access_token })
+          );
+          login(username, data.access_token);
+        })
+        .catch(function(e) {});
+    } else if (response.status == 401) {
+      alert("Invalid Username or Password");
+    } else {
+      alert("Problem with login please try again later");
+    }
+  });
+});
+
+document.getElementById("log-out").addEventListener("click", function(e) {
+  logout();
+});
 
 document.getElementById("req-form").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -23,14 +63,19 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
     case "post":
       addHeaders(request);
       generateBodyObject(request, queryFields, false);
+      break;
     case "put":
       addHeaders(request);
       generateBodyObject(request, queryFields, false);
+      break;
     case "delete":
-      request.url += `/${document.getElementById("Id").value}`;
+      var Id = document.getElementById("Id").value;
+      if (Id == "") {
+        alert("ID is required for this action");
+        return false;
+      }
+      request.url += `/${Id}`;
       addHeaders(request);
-    default:
-      x = 2;
   }
 
   document.getElementById("req-data").classList.remove("hide");
@@ -40,15 +85,18 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
     : "<i>Empty</i>";
 
   fetch(request.url, request.method).then(function(response) {
-    console.log(response);
     document.getElementById("res-status").innerText = `${response.status}  ${
       response.statusText
     }`;
 
+    if (response.status == 401 && getCurrentUser()) {
+      alert("Your session expired - please log back in");
+      logout();
+    }
+
     response
       .json()
       .then(function(data) {
-        console.log(data);
         document.getElementById("res-body").innerHTML = JSON.stringify(data);
       })
       .catch(function(e) {
@@ -56,6 +104,19 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
       });
   });
 });
+
+function login(username, token) {
+  document.getElementById("token-form").classList.add("hide");
+  document.getElementById("logged-in").classList.remove("hide");
+  document.getElementById("logged-in-username").innerText = username;
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  document.getElementById("token-form").classList.remove("hide");
+  document.getElementById("logged-in").classList.add("hide");
+  document.getElementById("logged-in-username").innerText = "";
+}
 
 function generateQueryParams(request, queryFields) {
   var queryParams = "";
@@ -66,7 +127,7 @@ function generateQueryParams(request, queryFields) {
       if (field.id == "Id" && fieldValue != "") {
         request.url += `/${fieldValue}`;
         break; //if searching on ID ignore other params
-      } else if (fieldValue != "") {
+      } else if (fieldValue != "" && field.type != "hidden") {
         fieldQueryParam = `${field.id}=${fieldValue}`;
         if (queryParams == "") {
           queryParams = `?${fieldQueryParam}`;
@@ -96,12 +157,24 @@ function generateBodyObject(request, queryFields, ignoreID) {
 function allowField(fieldValue, fieldIsID, ignoreID) {
   return fieldValue != "" && ((fieldIsID && !ignoreID) || !fieldIsID);
 }
+function getCurrentUser() {
+  user = localStorage.getItem("user");
+
+  if (user) {
+    return JSON.parse(user);
+  } else {
+    return null;
+  }
+}
 
 function addHeaders(request) {
-  request.method["headers"] = {
+  var currentUser = getCurrentUser();
+  request.method.headers = {
     Accept: "application/json",
-    "Content-Type": "application/json",
-    Authorization:
-      "bearer VXHucBcw-qv3PczZFiRf19kRjyXFWklhlZh2wHCh0EO6CntRYbJWZrYOdSZ_IEjo40ONIYKhRYKpsQuMfl8GdGxH5UPRb1YlvBmJciWmNJPEdv2yukHxXbn5eT2tXCKLCkXcDgczi_P2clGbADPcDha0JsaeTwrzp45f7bhXFNO4DvLl9NJoDK8jqpjk5W37jVf9lFOOmplyRcEuslipCOyANvBJEG84qGiYqL6_uVcPO_W6DV4vxr-Puqg6Ikm4"
+    "Content-Type": "application/json"
   };
+
+  if (currentUser) {
+    request.method.headers.Authorization = `bearer ${currentUser.token}`;
+  }
 }

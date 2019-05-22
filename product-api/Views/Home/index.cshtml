@@ -14,8 +14,23 @@
     <link rel="stylesheet" type="text/css" href="/Resources/style.css">
 </head>
 <body>
-    <h1>Products API</h1>
-    <form id="req-form" action="">
+    <header>
+        <h1>Products API</h1>
+        <form id="token-form" action="post">
+            <label for="password">Username</label>
+            <input type="text" id="username" name="username" required />
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required/>
+           <button>Login</button>
+        </form>
+        <div id="logged-in" class="hide">
+            Hi <span id="logged-in-username"></span>
+            <button id="log-out">Log Out</button>
+        </div>
+    </header>
+
+    <form id="req-form" action="get">
+        <input type="hidden" name="auth" id="auth" />
         <label for="req-type">Request Type</label>
         <select name="req-type" id="req-type">
             <option value="get">Get Products (GET)</option>
@@ -29,7 +44,7 @@
         <input name="@productParam.Name" id="@productParam.Name" type="text" />
 }
        
-        <button>Get Products</button>
+        <button>Send Request</button>
     </form>
     <div id="req-data" class="hide">
         <h2>Request</h2>

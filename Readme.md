@@ -26,6 +26,9 @@ This will return an Auth token with an expiry date of one day that can then be u
 
 Tokens can also be generated through the UI by using the login box on the header. This will save the token to a hidden field for subsequent requests.
 
+For testing the credentials are:
+admin Adm!NP%Ss
+
 ### Using Tokens
 
 Once generated a token will be valid for one day. To authenticate send the following header with each request:

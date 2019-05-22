@@ -191,6 +191,8 @@
     <Compile Include="Exceptions\InvalidProductException.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Data\UserData.cs" />
+    <Compile Include="Helpers\SecurePasswordHasher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />

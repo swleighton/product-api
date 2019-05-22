@@ -8,6 +8,11 @@ namespace productapi.Data
     {
         private static Dictionary<string, Product> Cache;
         private static object CacheLock = new object();
+
+        /// <summary>
+        /// Gets the products.
+        /// </summary>
+        /// <value>The products.</value>
         public static Dictionary<string, Product> Products
         {
             get
