@@ -14,13 +14,10 @@ namespace productapi
     {
         public void Configuration(IAppBuilder app)
         {
-            HttpConfiguration config = new HttpConfiguration();
-
             ConfigureOAuth(app);
 
             app.UseCors(CorsOptions.AllowAll);
 
-            AreaRegistration.RegisterAllAreas();
         }
 
         public void ConfigureOAuth(IAppBuilder app)

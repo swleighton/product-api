@@ -137,10 +137,14 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="index.html" />
     <Content Include="Resources\scripts\libs\fetch.min.js" />
     <Content Include="Resources\scripts\scripts.js" />
     <Content Include="Resources\style.css" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -148,6 +152,7 @@
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Models\HomepageViewModel.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Data\ProductData.cs" />
@@ -184,6 +189,8 @@
     <Compile Include="Provider\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Helpers\DictionaryToObject.cs" />
     <Compile Include="Exceptions\InvalidProductException.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -195,6 +202,9 @@
     <Folder Include="Helpers\" />
     <Folder Include="Resources\" />
     <Folder Include="Resources\scripts\" />
+    <Folder Include="Views\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
