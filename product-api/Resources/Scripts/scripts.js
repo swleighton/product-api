@@ -26,6 +26,9 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
     case "put":
       addHeaders(request);
       generateBodyObject(request, queryFields, false);
+    case "delete":
+      request.url += `/${document.getElementById("Id").value}`;
+      addHeaders(request);
     default:
       x = 2;
   }
@@ -37,12 +40,20 @@ document.getElementById("req-form").addEventListener("submit", function(e) {
     : "<i>Empty</i>";
 
   fetch(request.url, request.method).then(function(response) {
-    response.json().then(function(data) {
-      document.getElementById("res-status").innerText = `${response.status}  ${
-        response.statusText
-      }`;
-      document.getElementById("res-body").innerHTML = JSON.stringify(data);
-    });
+    console.log(response);
+    document.getElementById("res-status").innerText = `${response.status}  ${
+      response.statusText
+    }`;
+
+    response
+      .json()
+      .then(function(data) {
+        console.log(data);
+        document.getElementById("res-body").innerHTML = JSON.stringify(data);
+      })
+      .catch(function(e) {
+        document.getElementById("res-body").innerHTML = "<i>Empty</i>";
+      });
   });
 });
 
