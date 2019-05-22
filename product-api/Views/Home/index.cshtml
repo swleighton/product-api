@@ -16,12 +16,17 @@
 <body>
     <h1>Products API</h1>
     <form id="req-form" action="">
+        <label for="req-type">Request Type</label>
+        <select name="req-type" id="req-type">
+            <option value="get">Get Products (GET)</option>
+            <option value="post">Add Products (POST)</option>
+        </select>
         @foreach (PropertyInfo productParam in Model.ProductParams)
     {
         <label for="@productParam.Name">@productParam.Name</label>
         <input name="@productParam.Name" id="@productParam.Name" type="text" />
 }
-
+       
         <button>Get Products</button>
     </form>
     <div id="req-data" class="hide">
