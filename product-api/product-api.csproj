@@ -137,6 +137,10 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="index.html" />
+    <Content Include="Resources\scripts\libs\fetch.min.js" />
+    <Content Include="Resources\scripts\scripts.js" />
+    <Content Include="Resources\style.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -189,6 +193,8 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Provider\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
