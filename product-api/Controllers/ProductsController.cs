@@ -13,6 +13,7 @@ using System.Collections;
 using productapi.Data;
 using System.Web;
 using productapi.Helpers;
+using System.Web.Http.Description;
 
 namespace productapi.Controllers
 {
@@ -44,6 +45,8 @@ namespace productapi.Controllers
         /// <summary>
         /// Gets an ICollection of all current products filtered by query params of product props if specified
         /// </summary>
+        /// 
+        [ResponseType(typeof(ICollection<Product>))]
         [HttpGet]
         public ICollection<Product> GetProducts()
         {
@@ -65,6 +68,7 @@ namespace productapi.Controllers
         /// <returns>Http 200 Ok and a copy of the product if successful, a http 400 Bad Request and error message if unsuccessful</returns>  
 
         [HttpGet]
+        [ResponseType(typeof(Product))]
         public IHttpActionResult GetProduct(string id)
         {
             try
@@ -84,11 +88,12 @@ namespace productapi.Controllers
         /// <returns>Http 200 Ok and a copy of the product if successfully created, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPost]
         [Authorize]
-        public IHttpActionResult SetProduct([FromBody]JObject data)
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult SetProduct([FromBody]Product data)
         {
             try
             {
-                return Ok(ProductService.Add(data.ToObject<Product>()));
+                return Ok(ProductService.Add(data));
             }
             catch (ProductExistsException e)
             {
@@ -107,16 +112,16 @@ namespace productapi.Controllers
         /// <returns>Http 200 Ok if updated successfully, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPut]
         [Authorize]
-        public IHttpActionResult UpdateProduct([FromBody]JObject data)
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult UpdateProduct([FromBody]Product data)
         {
             try
             {
-                Product product = data.ToObject<Product>();
-                return Ok(ProductService.Update(product));
+                return Ok(ProductService.Update(data));
             }
             catch (KeyNotFoundException)
             {
-                return BadRequest("Updating the product failed - No product found with the Id:" + data["id"]);
+                return BadRequest("Updating the product failed - No product found with the Id:" + data.Id);
             }
 
         }
@@ -129,9 +134,10 @@ namespace productapi.Controllers
         /// <returns>Http 200 Ok if updated successfully, a http 400 Bad Request and error message if unsuccessful</returns>  
         [HttpPut]
         [Authorize]
-        public IHttpActionResult UpdateProduct(string id, [FromBody]JObject data)
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult UpdateProduct(string id, [FromBody]Product data)
         {
-            data["Id"] = id;
+            data.Id = id;
             return UpdateProduct(data);
         }
 
