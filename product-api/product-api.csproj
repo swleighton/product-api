@@ -145,6 +145,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Resources\bootstrap-4.0.0.min.css" />
+    <Content Include="Resources\scripts\libs\bootstrap-4.0.0.min.js" />
+    <Content Include="Resources\scripts\libs\jquery-3.4.1.slim.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
