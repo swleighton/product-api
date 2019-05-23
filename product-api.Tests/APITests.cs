@@ -18,7 +18,7 @@ namespace productapi.Tests
             Product templateProduct = TemplateProducts.Products["DYNS1"];
 
             ProductsController controller = new ProductsController(new Dictionary<string, Product>());
-            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
+            IHttpActionResult setProductResult = controller.SetProduct(templateProduct);
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
             Assert.AreEqual(productResult.Content, templateProduct);
@@ -30,7 +30,7 @@ namespace productapi.Tests
             Product templateProduct = new Product(null, null, null, null);
 
             ProductsController controller = new ProductsController(new Dictionary<string, Product>());
-            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
+            IHttpActionResult setProductResult = controller.SetProduct(templateProduct);
             BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
 
             Assert.IsNotNull(productResult); 
@@ -43,7 +43,7 @@ namespace productapi.Tests
             Product templateProduct = TemplateProducts.Products["DYNS1"];
 
             ProductsController controller = new ProductsController(TemplateProducts.Products);
-            IHttpActionResult setProductResult = controller.SetProduct(JObject.FromObject(templateProduct));
+            IHttpActionResult setProductResult = controller.SetProduct(templateProduct);
             BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
 
             Assert.IsNotNull(productResult);
@@ -103,7 +103,7 @@ namespace productapi.Tests
 
             Product updatedProduct = new Product("MCAIR", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A");
 
-            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct(JObject.FromObject(updatedProduct));
+            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct(updatedProduct);
 
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
@@ -115,10 +115,10 @@ namespace productapi.Tests
         {
             ProductsController controller = new ProductsController(TemplateProducts.Products);
 
-            IHttpActionResult setProductResult = controller.UpdateProduct(JObject.FromObject(new Product("MCAIR", "N/A", "N/A", "N/A")));
+            IHttpActionResult setProductResult = controller.UpdateProduct(new Product("MCAIR", "N/A", "N/A", "N/A"));
 
             BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
-            Assert.AreEqual("Updating the product failed - No product found with the Id:", productResult.Message);
+            Assert.AreEqual("Updating the product failed - No product found with the Id:MCAIR", productResult.Message);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace productapi.Tests
 
             Product updatedProduct = new Product("MCAIR", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A");
 
-            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", JObject.FromObject(updatedProduct));
+            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", updatedProduct);
 
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
@@ -146,7 +146,7 @@ namespace productapi.Tests
 
             Product updatedProduct = new Product("NOT AN ID", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A");
 
-            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", JObject.FromObject(new Product("NOT AN ID", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A")));
+            IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", new Product("NOT AN ID", "Apple MacBook Air 13-inch 128GB", "Apple", "MQD32X/A"));
 
             OkNegotiatedContentResult<Product> productResult = setProductResult as OkNegotiatedContentResult<Product>;
 
@@ -160,7 +160,7 @@ namespace productapi.Tests
                { "MCAIR", new Product("MCAIR", "N/A", "N/A", "MQD32X/A") }
             };
 
-            JObject updatedProduct =  JObject.Parse("{\"Description\": \"Apple MacBook Air 13-inch 128GB\", \"Brand\": \"Apple\" }");
+            Product updatedProduct =  JObject.Parse("{\"Description\": \"Apple MacBook Air 13-inch 128GB\", \"Brand\": \"Apple\" }").ToObject<Product>();
 
             IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", updatedProduct);
 
@@ -177,7 +177,7 @@ namespace productapi.Tests
                { "MCAIR", product }
             };
 
-            JObject updatedProduct = JObject.Parse("{\"NOTAFIELD\": \"Apple MacBook Air 13-inch 128GB\" }");
+            Product updatedProduct = JObject.Parse("{\"NOTAFIELD\": \"Apple MacBook Air 13-inch 128GB\" }").ToObject<Product>();
 
             IHttpActionResult setProductResult = new ProductsController(products).UpdateProduct("MCAIR", updatedProduct);
 
@@ -191,10 +191,10 @@ namespace productapi.Tests
         {
             ProductsController controller = new ProductsController(TemplateProducts.Products);
 
-            IHttpActionResult setProductResult = controller.UpdateProduct("MCAIR", JObject.FromObject(new Product("MCAIR", "N/A", "N/A", "N/A")));
+            IHttpActionResult setProductResult = controller.UpdateProduct("MCAIR", new Product("MCAIR", "N/A", "N/A", "N/A"));
 
             BadRequestErrorMessageResult productResult = setProductResult as BadRequestErrorMessageResult;
-            Assert.AreEqual("Updating the product failed - No product found with the Id:", productResult.Message);
+            Assert.AreEqual("Updating the product failed - No product found with the Id:MCAIR", productResult.Message);
         }
 
 
